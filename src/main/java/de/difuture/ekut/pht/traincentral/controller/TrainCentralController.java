@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.difuture.ekut.pht.traincentral.api.TrainRequest;
+import de.difuture.ekut.pht.traincentral.api.TrainResponse;
 import de.difuture.ekut.pht.traincentral.model.Train;
 import de.difuture.ekut.pht.traincentral.repository.TrainRepository;
 import lombok.NonNull;
@@ -26,9 +27,15 @@ public class TrainCentralController {
 	
 	
 	@RequestMapping(value = "/train", method = RequestMethod.POST)
-	public Train registry(@RequestBody final TrainRequest trainRequest) {
+	public Train postTrain(@RequestBody final TrainRequest trainRequest) {
 				
 		// Store new train and return
 		return this.trainRepository.save(new Train(trainRequest.getSparql()));
-	}	
+	}
+	
+	@RequestMapping(value = "/train", method = RequestMethod.GET)
+	public TrainResponse getTrain() {
+				
+		return new TrainResponse(this.trainRepository.findAll());
+	}
 }
