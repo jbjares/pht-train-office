@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,7 @@ public final class Train {
 	
 	private TrainState trainState;
 	
+	@ElementCollection
 	private Set<UUID> stations_visited;
 	
 	public Train() {}
