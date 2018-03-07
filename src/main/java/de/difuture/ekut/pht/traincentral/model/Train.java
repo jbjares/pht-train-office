@@ -40,10 +40,27 @@ public final class Train {
 		this.stations_visited = new HashSet<>();
 	}
 	
+	// Private copy constructor
+	private Train(final Train other) {
+
+		this.id = other.id;
+		this.sparql = other.sparql;
+		this.stations_visited = new HashSet<>(other.stations_visited);
+		this.trainState = other.trainState;
+	}
+	
+	
 	public Train withStation(UUID station) {
 		
-		final Train resultTrain = new Train(this.sparql, this.trainState);
+		final Train resultTrain = new Train(this);
 		resultTrain.stations_visited.add(station);
+		return resultTrain;
+	}
+	
+	public Train withState(TrainState state) {
+		
+		final Train resultTrain = new Train(this);
+		resultTrain.trainState = state;
 		return resultTrain;
 	}
 }

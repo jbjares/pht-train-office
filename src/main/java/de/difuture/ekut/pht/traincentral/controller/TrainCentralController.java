@@ -48,12 +48,12 @@ public class TrainCentralController {
 		
 		// Handle missing train
 		final Train train = this.trainRepository.findById(trainStateRequest.getId()).get();
-		
+
 		// TODO Handle missing train and wrong state
 		
 		// TODO Might be useful to implement Spring State Machine to keep track of the states that
 		// the train goes through
-		return this.trainRepository.save(new Train(train.getSparql(), TrainState.UPLOADED));
+		return this.trainRepository.save(train.withState(TrainState.UPLOADED));
 	}
 	
 	
