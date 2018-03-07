@@ -1,5 +1,7 @@
 package de.difuture.ekut.pht.traincentral.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -20,11 +22,26 @@ public final class Train {
 	
 	private String sparql;
 	
+	private TrainState trainState;
+	
+	private Set<UUID> stations_visited;
+	
 	public Train() {}
 	
+	
 	public Train(
-			@NonNull final String sparql) {
+			@NonNull final String sparql,
+			@NonNull final TrainState state) {
 		
 		this.sparql = sparql;
+		this.trainState = state;
+		this.stations_visited = new HashSet<>();
+	}
+	
+	public Train withStation(UUID station) {
+		
+		final Train resultTrain = new Train(this.sparql, this.trainState);
+		resultTrain.stations_visited.add(station);
+		return resultTrain;
 	}
 }
