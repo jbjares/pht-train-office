@@ -43,7 +43,7 @@ public class TrainCentralController {
 	}
 	
 	
-	@RequestMapping(value = "/train/upload", method = RequestMethod.PUT)
+	@RequestMapping(value = "/train/upload", method = RequestMethod.POST)
 	public Train setUploadState(@RequestBody TrainStateRequest trainStateRequest) {
 		
 		// Handle missing train
@@ -57,7 +57,7 @@ public class TrainCentralController {
 	}
 	
 	
-	@RequestMapping(value = "/train/station", method = RequestMethod.PUT)
+	@RequestMapping(value = "/train/station", method = RequestMethod.POST)
 	public Train addStation(@RequestBody TrainStationRequest trainStationRequest) {
 		
 		// Handle missing train
