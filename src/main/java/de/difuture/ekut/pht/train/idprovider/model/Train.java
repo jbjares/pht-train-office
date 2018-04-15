@@ -1,4 +1,4 @@
-package de.difuture.ekut.pht.traincentral.model;
+package de.difuture.ekut.pht.train.idprovider.model;
 
 import java.util.UUID;
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import lombok.Data;
 
 
 /**
- *  The traincentral currently only manages and assignes trainIDs.
+ *  The traincentral currently only assigns IDs to trains.
  *
  *  @author Lukas Zimmermann
  */

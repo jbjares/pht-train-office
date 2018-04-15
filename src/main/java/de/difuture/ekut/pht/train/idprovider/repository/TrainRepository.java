@@ -1,9 +1,8 @@
-package de.difuture.ekut.pht.traincentral.repository;
+package de.difuture.ekut.pht.train.idprovider.repository;
 
 import java.util.UUID;
 
+import de.difuture.ekut.pht.train.idprovider.model.Train;
 import org.springframework.data.repository.CrudRepository;
-
-import de.difuture.ekut.pht.traincentral.model.Train;
 
 public interface TrainRepository extends CrudRepository<Train, UUID> {}

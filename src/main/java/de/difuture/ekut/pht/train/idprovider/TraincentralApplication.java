@@ -1,4 +1,4 @@
-package de.difuture.ekut.pht.traincentral;
+package de.difuture.ekut.pht.train.idprovider;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
