@@ -9,7 +9,7 @@ import lombok.Data;
 
 
 /**
- *  The traincentral currently only assigns IDs to trains.
+ *  The trainidprovider currently only assigns IDs to trains.
  *
  *  @author Lukas Zimmermann
  */

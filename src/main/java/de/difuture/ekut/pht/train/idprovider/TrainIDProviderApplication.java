@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class TraincentralApplication {
+public class TrainIDProviderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TraincentralApplication.class, args);
+		SpringApplication.run(TrainIDProviderApplication.class, args);
 	}
 
 }
