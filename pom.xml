@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.difuture.ekut.pht.train</groupId>
-	<artifactId>trainidprovider</artifactId>
+	<artifactId>train-office</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>trainidprovider</name>
-	<description>PHT - Keeps track of all existing trainIDs and allows the creation of new ones</description>
+	<name>train-office</name>
+	<description>PHT - Keeps track of all existing trainIDs and allows the creation of new ones. Furthermore, keeps track of the registry URI that a train has been assigned to</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

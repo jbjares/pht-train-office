@@ -1,14 +1,14 @@
-package de.difuture.ekut.pht.train.idprovider;
+package de.difuture.ekut.pht.train.office;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class TrainIDProviderApplication {
+public class TrainOfficeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TrainIDProviderApplication.class, args);
+		SpringApplication.run(TrainOfficeApplication.class, args);
 	}
 
 }

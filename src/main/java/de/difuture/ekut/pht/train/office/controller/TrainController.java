@@ -1,18 +1,19 @@
-package de.difuture.ekut.pht.train.idprovider.controller;
+package de.difuture.ekut.pht.train.office.controller;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-import de.difuture.ekut.pht.train.idprovider.model.Train;
-import de.difuture.ekut.pht.train.idprovider.repository.TrainRepository;
+import de.difuture.ekut.pht.lib.core.model.Train;
+import de.difuture.ekut.pht.train.office.repository.TrainEntity;
+import de.difuture.ekut.pht.train.office.repository.TrainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.NonNull;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -31,23 +32,26 @@ public class TrainController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public Train postTrain() {
+	public Train postTrain(@RequestBody @Valid Train train) {
 
-		// Store new train and return
-		return this.trainRepository.save(new Train());
+        return this.trainRepository.save(new TrainEntity(train)).toTrain();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public Iterable<Train> doGetAll() {
 
-		return this.trainRepository.findAll();
+	    List<Train> result = new ArrayList<>();
+		this.trainRepository.findAll().forEach(x -> result.add(x.toTrain()));
+        return result;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Train> doGetOne(
 			@PathVariable("id") UUID trainID) {
 
-		final Optional<Train> train = this.trainRepository.findById(trainID);
-		return train.isPresent() ? ResponseEntity.ok(train.get()) : NOT_FOUND;
+		return this.trainRepository
+                .findById(trainID)
+                .map(x -> ResponseEntity.ok(x.toTrain()))
+                .orElse(NOT_FOUND);
 	}
 }
