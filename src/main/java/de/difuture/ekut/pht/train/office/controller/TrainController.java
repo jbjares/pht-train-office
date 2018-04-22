@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.NonNull;
 
-import javax.validation.Valid;
-
 
 @RestController
 @RequestMapping(value = "/train")
@@ -31,22 +29,26 @@ public class TrainController {
 		this.trainRepository = trainRepository;
 	}
 
+	/**
+	 * Creates new Train by assigning UUID.
+     *
+	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public Train postTrain(@RequestBody @Valid Train train) {
+	public Train createTrain() {
 
-        return this.trainRepository.save(new TrainEntity(train)).toTrain();
+        return this.trainRepository.save(new TrainEntity()).toTrain();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Iterable<Train> doGetAll() {
+	public Iterable<Train> getAll() {
 
-	    List<Train> result = new ArrayList<>();
+	    final List<Train> result = new ArrayList<>();
 		this.trainRepository.findAll().forEach(x -> result.add(x.toTrain()));
         return result;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Train> doGetOne(
+	public ResponseEntity<Train> getOne(
 			@PathVariable("id") UUID trainID) {
 
 		return this.trainRepository
