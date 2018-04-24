@@ -3,7 +3,6 @@ package de.difuture.ekut.pht.train.office.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import de.difuture.ekut.pht.lib.core.messages.TrainUpdate;
