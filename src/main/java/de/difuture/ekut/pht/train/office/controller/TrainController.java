@@ -26,9 +26,17 @@ public class TrainController {
 	
 	private final TrainRepository trainRepository;
 
+    @Autowired
+    public TrainController(
+            @NonNull final TrainRepository trainRepository) {
+
+        this.trainRepository = trainRepository;
+    }
 
     @StreamListener(target=Sink.INPUT)
     public void sink(TrainUpdate trainUpdate) {
+
+        System.out.println("TRAIN_OFFICE_HAS_RECEIVED_TRAIN_UPDATE");
 
         final URI registryURI = trainUpdate.getTrainRegistryURI();
         // Update the trainRegistryURI of the train
@@ -38,13 +46,6 @@ public class TrainController {
         trainEntity.setTrainRegistryURI(registryURI);
         this.trainRepository.saveAndFlush(trainEntity);
     }
-
-	@Autowired
-	public TrainController(
-			@NonNull final TrainRepository trainRepository) {
-
-		this.trainRepository = trainRepository;
-	}
 
 	/**
 	 * Creates new Train by assigning UUID.
