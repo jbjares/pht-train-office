@@ -1,13 +1,18 @@
 package de.difuture.ekut.pht.train.office.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import de.difuture.ekut.pht.lib.core.messages.TrainUpdate;
 import de.difuture.ekut.pht.lib.core.model.Train;
 import de.difuture.ekut.pht.train.office.repository.TrainEntity;
 import de.difuture.ekut.pht.train.office.repository.TrainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +26,19 @@ public class TrainController {
 	private static final ResponseEntity<Train> NOT_FOUND = ResponseEntity.notFound().build();
 	
 	private final TrainRepository trainRepository;
+
+
+    @StreamListener(target=Sink.INPUT)
+    public void sink(TrainUpdate trainUpdate) {
+
+        final URI registryURI = trainUpdate.getTrainRegistryURI();
+        // Update the trainRegistryURI of the train
+        final TrainEntity trainEntity = this.trainRepository
+                .findById(trainUpdate.getTrainID())
+                .orElse(new TrainEntity(trainUpdate.getTrainID(), registryURI));
+        trainEntity.setTrainRegistryURI(registryURI);
+        this.trainRepository.saveAndFlush(trainEntity);
+    }
 
 	@Autowired
 	public TrainController(
