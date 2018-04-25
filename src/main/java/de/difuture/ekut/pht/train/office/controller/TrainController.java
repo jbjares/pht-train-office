@@ -1,12 +1,11 @@
 package de.difuture.ekut.pht.train.office.controller;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+import de.difuture.ekut.pht.lib.core.api.Train;
 import de.difuture.ekut.pht.lib.core.messages.TrainUpdate;
-import de.difuture.ekut.pht.lib.core.model.Train;
 import de.difuture.ekut.pht.train.office.repository.TrainEntity;
 import de.difuture.ekut.pht.train.office.repository.TrainRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +37,21 @@ public class TrainController {
 
         System.out.println("TRAIN_OFFICE_HAS_RECEIVED_TRAIN_UPDATE");
 
-        final URI registryURI = trainUpdate.getTrainRegistryURI();
-        // Update the trainRegistryURI of the train
-        final TrainEntity trainEntity = this.trainRepository
-                .findById(trainUpdate.getTrainID())
-                .orElse(new TrainEntity(trainUpdate.getTrainID(), registryURI));
-        trainEntity.setTrainRegistryURI(registryURI);
-        this.trainRepository.saveAndFlush(trainEntity);
+        this.trainRepository.save(
+
+                this.trainRepository
+                        .findById(trainUpdate.getTrainID())
+                        .map(trainEntity -> {
+
+                            final URI uri = trainUpdate.getTrainRegistryURI();
+                            if (uri != null) {
+
+                                trainEntity.setTrainRegistryURI(uri);
+                            }
+                            return trainEntity;
+                        })
+                        .orElse(new TrainEntity(trainUpdate))
+        );
     }
 
 	/**
@@ -60,14 +67,14 @@ public class TrainController {
 	@RequestMapping(method = RequestMethod.GET)
 	public Iterable<Train> getAll() {
 
-	    final List<Train> result = new ArrayList<>();
-		this.trainRepository.findAll().forEach(x -> result.add(x.toTrain()));
-        return result;
+	    return StreamSupport.stream(this.trainRepository.findAll().spliterator(), false)
+                .map(TrainEntity::toTrain)
+                .collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Train> getOne(
-			@PathVariable("id") UUID trainID) {
+			@PathVariable("id") Long trainID) {
 
 		return this.trainRepository
                 .findById(trainID)

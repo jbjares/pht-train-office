@@ -1,32 +1,32 @@
 package de.difuture.ekut.pht.train.office.repository;
 
 
-import de.difuture.ekut.pht.lib.core.model.Train;
-import lombok.AllArgsConstructor;
+import de.difuture.ekut.pht.lib.core.api.Train;
+import de.difuture.ekut.pht.lib.core.messages.TrainUpdate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
-import java.util.UUID;
 
-@Entity
+@NodeEntity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class TrainEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID trainID;
+    @GeneratedValue
+    private Long trainID;
     private URI trainRegistryURI;
 
-    public TrainEntity(final Train train) {
 
-        this.trainRegistryURI = train.getTrainRegistryURI();
+    public TrainEntity(@NotNull TrainUpdate trainUpdate) {
+
+        this.trainID = trainUpdate.getTrainID();
+        this.trainRegistryURI = trainUpdate.getTrainRegistryURI();
     }
 
     public Train toTrain() {
