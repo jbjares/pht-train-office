@@ -6,8 +6,8 @@ import java.util.stream.StreamSupport;
 
 import de.difuture.ekut.pht.lib.core.api.Train;
 import de.difuture.ekut.pht.lib.core.messages.TrainUpdate;
-import de.difuture.ekut.pht.train.office.repository.TrainEntity;
-import de.difuture.ekut.pht.train.office.repository.TrainRepository;
+import de.difuture.ekut.pht.lib.core.neo4j.entity.TrainEntity;
+import de.difuture.ekut.pht.train.office.repository.TrainEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -23,11 +23,11 @@ public class TrainController {
 
 	private static final ResponseEntity<Train> NOT_FOUND = ResponseEntity.notFound().build();
 	
-	private final TrainRepository trainRepository;
+	private final TrainEntityRepository trainRepository;
 
     @Autowired
     public TrainController(
-            @NonNull final TrainRepository trainRepository) {
+            @NonNull final TrainEntityRepository trainRepository) {
 
         this.trainRepository = trainRepository;
     }
@@ -81,4 +81,17 @@ public class TrainController {
                 .map(x -> ResponseEntity.ok(x.toTrain()))
                 .orElse(NOT_FOUND);
 	}
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Train> deleteOne(
+            @PathVariable("id") Long trainID) {
+
+        return this.trainRepository
+                .findById(trainID)
+                .map((trainEntity -> {
+                    this.trainRepository.delete(trainEntity);
+                    return ResponseEntity.ok(trainEntity.toTrain());
+                    }))
+                .orElse(NOT_FOUND);
+    }
 }
