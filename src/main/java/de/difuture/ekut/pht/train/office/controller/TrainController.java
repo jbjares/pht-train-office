@@ -1,6 +1,7 @@
 package de.difuture.ekut.pht.train.office.controller;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -35,23 +36,19 @@ public class TrainController {
     @StreamListener(target=Sink.INPUT)
     public void sink(TrainUpdate trainUpdate) {
 
-        System.out.println("TRAIN_OFFICE_HAS_RECEIVED_TRAIN_UPDATE");
+        // Only update if the train already exists (otherwise the id is meaningless)
+        final URI trainRegistryURI = trainUpdate.getTrainRegistryURI();
+        final Long id = trainUpdate.getTrainID();
 
-        this.trainRepository.save(
+        if (trainRegistryURI != null && id != null) {
 
-                this.trainRepository
-                        .findById(trainUpdate.getTrainID())
-                        .map(trainEntity -> {
+            this.trainRepository.findById(id)
+                    .ifPresent(trainEntity -> {
 
-                            final URI uri = trainUpdate.getTrainRegistryURI();
-                            if (uri != null) {
-
-                                trainEntity.setTrainRegistryURI(uri);
-                            }
-                            return trainEntity;
-                        })
-                        .orElse(new TrainEntity(trainUpdate))
-        );
+                        trainEntity.setTrainRegistryURI(trainRegistryURI);
+                        this.trainRepository.save(trainEntity);
+                    });
+        }
     }
 
 	/**
