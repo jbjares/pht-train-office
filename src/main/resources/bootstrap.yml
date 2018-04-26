@@ -2,9 +2,6 @@ server:
   port: 6001
 
 spring:
-  h2:
-    console:
-      enabled: true
   application:
     name: train-office
   cloud:
@@ -39,14 +36,12 @@ eureka:
 ---
 
 spring:
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
   profiles: denbi
   application:
     name: train-office
+  data:
+    neo4j:
+      uri: bolt://193.196.20.91:7474
   cloud:
     stream:
       kafka:
