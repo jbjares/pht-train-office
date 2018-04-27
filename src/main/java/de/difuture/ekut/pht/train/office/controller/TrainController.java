@@ -4,9 +4,9 @@ import java.net.URI;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import de.difuture.ekut.pht.lib.core.api.Train;
+import de.difuture.ekut.pht.lib.core.api.APITrain;
 import de.difuture.ekut.pht.lib.core.messages.TrainUpdate;
-import de.difuture.ekut.pht.lib.core.neo4j.entity.TrainEntity;
+import de.difuture.ekut.pht.lib.core.neo4j.entity.Train;
 import de.difuture.ekut.pht.train.office.repository.TrainEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -22,7 +22,7 @@ import lombok.NonNull;
 @RequestMapping(value = "/train")
 public class TrainController {
 
-	private static final ResponseEntity<Train> NOT_FOUND = ResponseEntity.notFound().build();
+	private static final ResponseEntity<APITrain> NOT_FOUND = ResponseEntity.notFound().build();
 	
 	private final TrainEntityRepository trainRepository;
 
@@ -36,7 +36,7 @@ public class TrainController {
     @StreamListener(target=Sink.INPUT)
     public void sink(TrainUpdate trainUpdate) {
 
-        // Only update if the train already exists (otherwise the id is meaningless)
+        // Only update if the train already exists (otherwise the trainDestinationID is meaningless)
         final URI trainRegistryURI = trainUpdate.getTrainRegistryURI();
         final Long id = trainUpdate.getTrainID();
 
@@ -52,25 +52,25 @@ public class TrainController {
     }
 
 	/**
-	 * Creates new Train by assigning UUID.
+	 * Creates new APITrain by assigning UUID.
      *
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public Train createTrain() {
+	public APITrain createTrain() {
 
-        return this.trainRepository.save(new TrainEntity()).toTrain();
+        return this.trainRepository.save(new Train()).toTrain();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Iterable<Train> getAll() {
+	public Iterable<APITrain> getAll() {
 
 	    return StreamSupport.stream(this.trainRepository.findAll().spliterator(), false)
-                .map(TrainEntity::toTrain)
+                .map(Train::toTrain)
                 .collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Train> getOne(
+	public ResponseEntity<APITrain> getOne(
 			@PathVariable("id") Long trainID) {
 
 		return this.trainRepository
@@ -80,7 +80,7 @@ public class TrainController {
 	}
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Train> deleteOne(
+    public ResponseEntity<APITrain> deleteOne(
             @PathVariable("id") Long trainID) {
 
         return this.trainRepository
