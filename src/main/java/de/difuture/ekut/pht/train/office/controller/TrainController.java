@@ -1,7 +1,6 @@
 package de.difuture.ekut.pht.train.office.controller;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.NonNull;
 
 
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/train")
 public class TrainController {
