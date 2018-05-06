@@ -1,5 +1,5 @@
 server:
-  port: 6001
+  port: 8762
 
 spring:
   application:
@@ -59,7 +59,7 @@ spring:
           destination: trainupdate
 
 server:
-    port: 6001
+    port: 8762
 
 eureka:
   instance:
